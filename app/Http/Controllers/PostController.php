@@ -7,38 +7,102 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index(){
-        $posts = Post::all();
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $posts = Post::paginate(3);
         return view('index',compact('posts'));
     }
-    public function create(){
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
         return view('create');
     }
-    public function store(Request $request){
-        $post = new Post();
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->save();
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // $post = new Post();
+        // $post->title = $request->title;
+        // $post->description = $request->description;
+        // $post->save();
+        $request->validate([
+            "title" => "required|unique:posts,title|max:20",
+            "description" => "required"
+        ]);
+        Post::create([
+            "title"=> $request->title,
+            "description" => $request->description
+        ]);
         return redirect()->route('post.index')->with("status","Post is inserted");
     }
-    public function show($id){
-        $post = Post::find($id);
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $post = Post::findOrFail($id);
         return view('show',compact('post'));
     }
-    public function destroy($id){
-        $post = Post::find($id);
-        $post->delete();
-        return redirect()->route('post.index')->with("status","Post is deleted");
-    }
-    public function edit($id){
-        $post = Post::find($id);
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $post = Post::findOrFail($id);
         return view('edit',compact('post'));
     }
-    public function update(Request $request,$id){
-        $post = Post::find($id);
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
         $post->title = $request->title;
-        $post->description =  $request->description;
+        $post->description = $request->description;
         $post->update();
-        return redirect()->route('post.index')->with("status","Post is updated");
+        return redirect()->route('post.index')->with("status","Post is deleted");
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return redirect()->route('post.index')->with("status","Post is deleted");
+    
     }
 }

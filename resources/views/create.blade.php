@@ -15,16 +15,30 @@
                             <a href="{{route('post.index')}}" class="btn btn-outline-primary">Home</a>
                         </div>
                     </div>
-
+                    @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="m-0">
+                            @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <form action="{{route('post.store')}}" method="post">
                         @csrf
                         <div class="form-group">
                             <label for="">Post Tilte</label>
-                            <input type="text" class="form-control form-control-lg" name="title">
+                            <input type="text" value="{{old('title')}}" class="form-control form-control-lg @error('title') is-invalid @enderror" name="title">
+                            @error('title')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="">Post Description</label>
-                            <textarea rows="10" class="form-control form-control-lg" name="description"></textarea>
+                            <textarea rows="10" class="form-control form-control-lg @error('title') is-invalid @enderror" name="description">{{old('title')}}</textarea>
+                           @error('description')
+                            <div class="invalid-feedback">{{$message}}</div>
+                            @enderror
                         </div>
                         <div class="form-group mt-3">
                             <button class="btn btn-primary btn-lg">Create</button>

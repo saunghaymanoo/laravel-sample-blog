@@ -26,7 +26,7 @@
                     <p class="card-text text-black-50">{{$post->description}}</p>
                     <div class="d-flex justify-content-between">
                     <p>{{$post->created_at->format('j M Y H:i A')}}</p>
-                    <a href="{{route('post.show',$post->id)}}" class="btn btn-outline-primary">See More</a>
+                    <!-- <a href="{{route('post.show',$post->id)}}" class="btn btn-outline-primary">See More</a> -->
                     </div>
                 </div>
                 
